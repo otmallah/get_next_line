@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <string.h>
 
 char	*ft_strcat(char *str1, char *str2)
 {
@@ -65,7 +66,7 @@ char	*get_next_line(int fd)
 	static char	*buff;
 	static char	*temp;
 	char		*help;
-	int j;
+	static int j;
 	int			k;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -82,7 +83,9 @@ char	*get_next_line(int fd)
 			return (temp);
 		}
 		else
+		{
 			temp = ft_strjoin(temp, help);
+		}
 	}
 	else
 	{
@@ -90,33 +93,45 @@ char	*get_next_line(int fd)
 		if (!buff)
 			return (NULL);
 	}
-	while (1)
+	// printf("Temp: %s\n",temp);
+	while (j >= 0)
 	{
 		j = read(fd, buff, BUFFER_SIZE);
-		if (j < 0)
-			return NULL;
+		buff[j + 1] = '\0';
+		if (j == 0)
+		{
+			if (strncmp(temp,"\0",1) == 0)
+				return(NULL);
+			else
+				return (temp);
+		}
 		if (ft_strchr(buff, '\n') != 0 && j >= 0)
 		{
 			temp = ft_strjoin_sec(temp, buff);
 			return (temp);
 		}
-		if (*temp == '\0')
-			temp = NULL;
 		else
 			temp = ft_strjoin(temp, buff);
 	}
-	return (NULL);
+	return temp;
 }
 
 
 int main(void)
 {
 	int fd;
+	int i;
 
-	fd = open("fff", O_CREAT | O_RDWR , 0777);
+	i = 0;
+	fd = open("555", O_RDONLY);
 	//get_next_line(fd);
+	char *str;
 	printf("%s\n" , get_next_line(fd));
 	printf("%s\n" , get_next_line(fd));
 	printf("%s\n" , get_next_line(fd));
 	printf("%s\n" , get_next_line(fd));
+	printf("%s\n" , get_next_line(fd));
+	printf("%s\n" , get_next_line(fd));
+	printf("%s\n" , get_next_line(fd));
+
 }
