@@ -1,6 +1,6 @@
 #include "get_next_line.h"
 
-ssize_t ft_strlen(const char *str);
+size_t ft_strlen(const char *str);
 
 static char	*ft_strcat(char *str1, char *str2)
 {
@@ -65,7 +65,7 @@ static void	check(const char *s, char *su, int sta, int len)
 	su[j] = '\0';
 }
 
-ssize_t ft_strlen(const char *str)
+size_t ft_strlen(const char *str)
 {
     int i;
 
@@ -113,7 +113,7 @@ int	ft_strchr_frr(const char *str, int c)
     return 0;
 }
 
-char	*ft_strchr(const char *str, int c)
+int	ft_strchr(const char *str, int c)
 {
 	int		i;
 	char	*st;

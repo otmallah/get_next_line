@@ -24,6 +24,7 @@ char	*ft_strcat(char *str1, char *str2)
 		str1[i + j] = str2[j];
 		j++;
 	}
+	str1[i + j] = '\0';
 	return (str1);
 }
 
@@ -39,21 +40,19 @@ char	*ft_strcat_2(char *str1, char *str2)
 		str1[i + j] = str2[j];
 		j++;
 	}
+	str1[i + j] = '\0';
 	return (str1);
 }
 
-char	*ft_strjoin_sec( char *s1,  char *s2)
+char	*ft_strjoin_sec(char *s1, char *s2)
 {
 	char	*str;
-	int		k;
-	int		i;
 	int		j;
 
-	while (s1[i])
-		i++;
+	j = 0;
 	while (s2[j] != '\n')
 		j++;
-	str = (char *)calloc(1, (i + j));
+	str = (char *)calloc(1, (ft_strlen(s1) + j));
 	if (!str)
 		return (NULL);
 	ft_strcat(str, s1);
@@ -61,49 +60,54 @@ char	*ft_strjoin_sec( char *s1,  char *s2)
 	return (str);
 }
 
-
-char    *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	char		buff[BUFFER_SIZE + 1];
-	//static char	*str;
-	static char *temp;
-	static int 	a;
-	int k;
-	static int 	i;
-	static int 	j;
+	static char	*buff;
+	static char	*temp;
+	char		*help;
+	int j;
+	int			k;
 
-	i = 0;
-	a = 0;
-	buff[BUFFER_SIZE + 1] = '\0';
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	temp = ft_strdup("");
- 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return NULL;
 	if (buff)
 	{
 		k = ft_strchr_frr(buff, '\n');
-		if (k != 0)
-			temp = ft_strjoin(temp, &buff[k + 1]);
+		buff[k] = 'a';
+		help = &buff[k + 1];
+		if (ft_strchr(help, '\n') != 0)
+		{
+			temp = ft_strjoin_sec(temp, help);
+			return (temp);
+		}
+		else
+			temp = ft_strjoin(temp, help);
 	}
-	// else
-	// {
-	// 	buff = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
-	// 	if (!buff)
-	// 		return NULL;
-	// }
-	//temp = ft_strdup(buff);
+	else
+	{
+		buff = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+		if (!buff)
+			return (NULL);
+	}
 	while (1)
 	{
-		read(fd, buff, BUFFER_SIZE);
-		if (ft_strchr(buff, '\n') != 0)
+		j = read(fd, buff, BUFFER_SIZE);
+		if (j < 0)
+			return NULL;
+		if (ft_strchr(buff, '\n') != 0 && j >= 0)
 		{
 			temp = ft_strjoin_sec(temp, buff);
 			return (temp);
 		}
+		if (*temp == '\0')
+			temp = NULL;
 		else
 			temp = ft_strjoin(temp, buff);
 	}
-	return temp;
+	return (NULL);
 }
+
 
 int main(void)
 {
@@ -115,37 +119,4 @@ int main(void)
 	printf("%s\n" , get_next_line(fd));
 	printf("%s\n" , get_next_line(fd));
 	printf("%s\n" , get_next_line(fd));
-	printf("%s\n" , get_next_line(fd));
-	printf("%s\n" , get_next_line(fd));
-	printf("%s\n" , get_next_line(fd));
-	printf("%s\n" , get_next_line(fd));
 }
-
-
-// char	*gnl(int fd)
-// {
-// 	int ret;
-// 	static char *buf
-// 	char *temp = "";
-
-// 	if (buf)
-// 	{	
-// 		if (ft_strchr_frr(buf, '\n') == 5)
-// 		{
-// 			temp = add_buf_mn_\n()
-// 			return (temp)
-// 		}
-// 	}
-// 	else
-// 		buf alocate
-// 	while (1)
-// 	{		
-// 		read(fd, buf, BUFFER_SIZE);
-// 		if (ft_strchr_frr(buf, '\n') == 5)
-// 		{
-// 			temp = add_buf_htal_\n()
-// 			return (temp)
-// 		}
-// 		else
-// 			temp = join(buf)
-// 	}
