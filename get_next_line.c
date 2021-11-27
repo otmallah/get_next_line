@@ -61,6 +61,36 @@ char	*ft_strjoin_sec(char *s1, char *s2)
 	return (str);
 }
 
+// char	*check_line(char *buff_read, char *temp)
+// {
+// 	char	*help;
+// 	int		k;
+// 	char	*first_str;
+// 	char	*sec_str;
+
+// 	k = ft_strchr_frr(buff_read, '\n');
+// 	buff_read[k] = 'a';
+// 	help = &buff_read[k + 1];
+// 	if (ft_strchr(help, '\n') != 0)
+// 	{
+// 		first_str = ft_strjoin_sec(temp, help);
+// 		free(temp);
+// 		temp = first_str;
+// 		return (temp);
+// 	}
+// 	else
+// 	{
+// 		sec_str = ft_strjoin(temp, help);
+// 		free(temp);
+// 		temp = sec_str;
+// 		free(buff_read);
+// 		buff_read = (char *)calloc(sizeof(char) ,  (BUFFER_SIZE + 1));
+// 		buff_read[BUFFER_SIZE] = '\0';
+// 		if (!buff_read)
+// 			return (NULL);
+// 	}
+// }
+
 char	*get_next_line(int fd)
 {
 	static char	*buff;
@@ -70,6 +100,7 @@ char	*get_next_line(int fd)
 	char		*set;
 	char		*sun;
 	char		*see;
+	char		*spopo;
 	int 		j;
 	int			k;
 
@@ -111,10 +142,20 @@ char	*get_next_line(int fd)
 	while (1)
 	{
 		j = read(fd, buff, BUFFER_SIZE);
+		if (j == -1)
+		{
+			free(buff);
+			free(temp);
+			buff = NULL;
+			return NULL;
+		}
 		if (j == 0)
 		{
 			if (strncmp(temp,"\0",1) == 0)
+			{
+				free(temp);
 				return(NULL);
+			}
 			else
 			{
 				sun = ft_strjoin(temp, buff);
@@ -132,8 +173,9 @@ char	*get_next_line(int fd)
 		}
 		else
 		{
-			temp = ft_strjoin(temp, buff);
-			free(buff);
+			spopo = ft_strjoin(temp, buff);
+			free(temp);
+			temp = spopo;
 			buff = (char *)calloc(sizeof(char) ,  (BUFFER_SIZE + 1));
 			buff[BUFFER_SIZE + 1] = '\0';
 			if (!buff)
@@ -144,27 +186,27 @@ char	*get_next_line(int fd)
 }
 
 
-int main(void)
-{
-	int fd;
+// int main(void)
+// {
+// 	int fd;
 
-	char *line;
-	fd = open("file", O_RDONLY);
-	while ((line = get_next_line(fd))!= NULL)
-	{
-		printf("%s" , line);
-		free(line);
-	}
-	//printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	// printf("%s\n" , get_next_line(fd));
-	//system("leaks a.out");
-}
+// 	char *line;
+// 	fd = open("file", O_RDONLY);
+// 	while ((line = get_next_line(fd))!= NULL)
+// 	{
+// 		printf("%s" , line);
+// 		free(line);
+// 	}
+// 	//printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	// printf("%s\n" , get_next_line(fd));
+// 	//system("leaks a.out");
+// }
